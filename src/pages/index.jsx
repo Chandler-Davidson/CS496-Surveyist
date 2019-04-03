@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
+import Page from '../components/page';
 
-function Index() {
+export default function Index() {
   return (
-    <div>
-      <p>Hi!</p>
-    </div>
+    <Page>
+      <p>Hello!</p>
+    </Page>
   );
 }
-
-export default Index;
