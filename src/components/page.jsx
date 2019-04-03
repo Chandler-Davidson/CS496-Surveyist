@@ -18,9 +18,8 @@ export default function Page({ children }) {
       {children}
       <style jsx global>{`
         body {
-          background: #f8f9fc;
+          background: #fff;
           font: 11px menlo;
-          margin: 1%;
         }
       `}</style>
     </div>
