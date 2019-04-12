@@ -1,5 +1,5 @@
 {
-  "name": "Surveyist",
+  "name": "Client",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,14 +8,21 @@
     "build": "next build ./src",
     "start": "next start ./src"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chandler-Davidson/Surveyist.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
+    "chart.js": "^2.8.0",
     "next": "^8.0.4",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.6",
+    "react-chartjs-2": "^2.7.6",
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
