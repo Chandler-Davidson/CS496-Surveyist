@@ -25,7 +25,7 @@ namespace SurveyistServer
             Get[nameof(ChartTypes)] = _ => ChartTypes();
             //Get[$"{nameof(PreviousRun)}/{{runId}}"] = parameters => PreviousRun(parameters.runId);
             //Get[nameof(RuleDefinitions)] = _ => RuleDefinitions();
-            //Post[nameof(NewAnalysis), true] = async (parameters, token) => await NewAnalysis();
+            Post[nameof(NewSurvey), true] = async (parameters, token) => NewSurvey();
         }
 
         internal static MongoClient Client { get; } = new MongoClient("mongodb://localhost:27017");
@@ -48,6 +48,17 @@ namespace SurveyistServer
         private Response ChartTypes()
         {
             return GetResponse("ChartTypes", _emptyFilter);
+        }
+
+        private Response NewSurvey()
+        {
+            var surveyConfig = Request.Form;
+
+            var newDoc = BsonDocument.Parse(surveyConfig);
+            var SurveyDetails = Database.GetCollection<BsonDocument>("SurveyDetails");
+            SurveyDetails.InsertOne(newDoc);
+
+            return HttpStatusCode.OK;
         }
     }
 
