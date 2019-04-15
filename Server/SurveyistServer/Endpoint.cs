@@ -72,8 +72,7 @@ namespace SurveyistServer
                 var briefJson = new JavaScriptSerializer().Serialize(surveyConfig);
 
                 // Insert into reference collection
-                var previousSurveys = DatabaseManager.GetCollection("PreviousSurveys");
-                previousSurveys.InsertOne(BsonDocument.Parse(briefJson));
+                DatabaseManager.InsertNewDocument("PreviousSurveys", briefJson);
 
                 //var fileStream = Request.Files.FirstOrDefault()?.Value;
 
