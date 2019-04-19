@@ -24,6 +24,7 @@ namespace SurveyistServer
             if (defaultExist) return;
 
             var contents = File.ReadAllText(collectionPath);
+            _database.CreateCollection(collectionName);
             InsertNewDocument(collectionName, contents);
         }
 

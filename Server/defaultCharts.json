@@ -1,8 +1,6 @@
-﻿[
-  {
-    "name": "Line Chart"
-  },
-  {
-    "name": "Heat Map"
-  }
-]
+﻿{
+  "charts": [
+    "Line Chart",
+    "Heat Map"
+  ]
+}
