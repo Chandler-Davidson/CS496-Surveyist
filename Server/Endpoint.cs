@@ -1,14 +1,9 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Text;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
 using Nancy;
-using Nancy.Extensions;
 using Nancy.Json;
-using Nancy.ModelBinding;
 using Nancy.Responses;
 
 namespace SurveyistServer
@@ -17,7 +12,7 @@ namespace SurveyistServer
     {
         public Endpoint()
         {
-            Options["/{catchAll*}"] = parmeters => { return new Response {StatusCode = HttpStatusCode.Accepted}; };
+            Options["/{catchAll*}"] = parameters => new Response {StatusCode = HttpStatusCode.Accepted};
 
             After.AddItemToEndOfPipeline(context =>
             {
@@ -33,7 +28,7 @@ namespace SurveyistServer
             Post[nameof(NewSurvey), true] = async (parameters, token) => NewSurvey();
         }
 
-        internal DatabaseManager DatabaseManager { get; } = new DatabaseManager();
+        internal Database DatabaseManager { get; } = new Database();
 
         private Response PreviousSurvey()
         {
@@ -60,51 +55,41 @@ namespace SurveyistServer
 
         private Response NewSurvey()
         {
-            try
+            var surveyConfig = Request.Form;
+
+            var surveyId = Guid.NewGuid();
+            surveyConfig["surveyId"] = surveyId;
+            surveyConfig["timeCreated"] = DateTime.UtcNow.ToString("o");
+
+            // Convert to json intermediate, because Mongo can't handle dynamic dictionary
+            var briefJson = new JavaScriptSerializer().Serialize(surveyConfig);
+
+            // Insert into reference collection
+            DatabaseManager.InsertNewDocument("PreviousSurveys", briefJson);
+
+            //var fileStream = Request.Files.FirstOrDefault()?.Value;
+
+            //var bytes = new byte[fileStream.Length];
+            //fileStream.Position = 0;
+            //fileStream.Read(bytes, 0, (int)fileStream.Length);
+            //var fileContents = Encoding.ASCII.GetString(bytes);
+
+
+            ////surveyConfig["data"] = new JavaScriptSerializer().DeserializeObject(fileContents);
+            //var detailedJson = new JavaScriptSerializer().Serialize(surveyConfig);
+
+            //// Insert into detailed collection
+            //var surveyDetails = DatabaseManager.GetCollection("SurveyDetails");
+            //surveyDetails.InsertOne(detailedJson);
+
+            return new TextResponse(surveyId.ToString())
             {
-                var surveyConfig = Request.Form;
-
-                var surveyId = Guid.NewGuid();
-                surveyConfig["surveyId"] = surveyId;
-                surveyConfig["timeCreated"] = DateTime.UtcNow.ToString("o");
-
-                // Convert to json intermediate, because Mongo can't handle dynamic dictionary
-                var briefJson = new JavaScriptSerializer().Serialize(surveyConfig);
-
-                // Insert into reference collection
-                DatabaseManager.InsertNewDocument("PreviousSurveys", briefJson);
-
-                //var fileStream = Request.Files.FirstOrDefault()?.Value;
-
-                //var bytes = new byte[fileStream.Length];
-                //fileStream.Position = 0;
-                //fileStream.Read(bytes, 0, (int)fileStream.Length);
-                //var fileContents = Encoding.ASCII.GetString(bytes);
-
-
-                ////surveyConfig["data"] = new JavaScriptSerializer().DeserializeObject(fileContents);
-                //var detailedJson = new JavaScriptSerializer().Serialize(surveyConfig);
-
-                //// Insert into detailed collection
-                //var surveyDetails = DatabaseManager.GetCollection("SurveyDetails");
-                //surveyDetails.InsertOne(detailedJson);
-
-                return new TextResponse(surveyId.ToString())
-                {
-                    StatusCode = HttpStatusCode.OK
-                };
-            }
-            catch (Exception e)
-            {
-
-                throw;
-            }
-
-            return HttpStatusCode.BadRequest;
+                StatusCode = HttpStatusCode.OK
+            };
         }
     }
 
-    public static class NancyMongoDBExtensions
+    public static class NancyMongoDbExtensions
     {
         public static Response AsResponse(this IAsyncCursor<BsonDocument> cursor)
         {
