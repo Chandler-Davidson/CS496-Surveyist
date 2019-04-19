@@ -9,12 +9,11 @@ import Page from '../components/page';
 import Get, { Post, GetValue } from '../components/getData';
 import ChartSelectCard from '../components/chartSelectCard';
 
-const chartSelections = charts =>
-  charts.map((chart, i) => (
-    <ToggleButton key={i} value={chart} variant="outline-dark">
-      <ChartSelectCard chart={chart} />
-    </ToggleButton>
-  ));
+const chartSelections = chart => (
+  <ToggleButton key={chart} value={chart} variant="outline-dark">
+    <ChartSelectCard name={chart} />
+  </ToggleButton>
+);
 
 const generateSurvey = surveyType => {
   const surveyName = document.getElementById('surveyName').value;
@@ -29,16 +28,15 @@ const generateSurvey = surveyType => {
     const response = await Post('NewSurvey', formData);
 
     if (response.status === 200) {
-      Router.push(
-        `/questions/?surveyId=${response.data}`,
-        `newSurvey/${surveyName}`
-      );
+      Router.push(`/questions?surveyId=${response.data}`);
     }
   })();
 };
 
 export default function NewSurvey() {
-  const chartTypes = GetValue(Get('ChartTypes'));
+  const _chartTypes = GetValue(Get('ChartTypes'));
+  const chartTypes = _chartTypes.length ? _chartTypes[0].charts : [];
+
   const [selectedSurvey, setSurvey] = useState('');
 
   return (
@@ -56,7 +54,7 @@ export default function NewSurvey() {
           name="chartSelection"
           onChange={x => setSurvey(x.name)}
         >
-          {chartSelections(chartTypes)}
+          {chartTypes.map(chartSelections)}
         </ToggleButtonGroup>
 
         <input

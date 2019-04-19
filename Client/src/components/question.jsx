@@ -1,27 +1,21 @@
-import React, { useState } from 'react';
-import Form from 'react-bootstrap/Form';
+import React from 'react';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 
-export default function Question() {
+export default function Question(props) {
   return (
     <InputGroup>
-      <FormControl
-        placeholder="My first question"
-        aria-label="Recipient's username"
-        aria-describedby="basic-addon2"
-      />
+      <FormControl placeholder="Survey question" />
 
       <DropdownButton
         as={InputGroup.Append}
-        variant="outline-secondary"
-        title="Dropdown"
-        id="input-group-dropdown-2"
+        // variant="outline-secondary"
+        title="Selection Type"
       >
-        <Dropdown.Item href="#">Point</Dropdown.Item>
-        <Dropdown.Item href="#">Area</Dropdown.Item>
+        <Dropdown.Item>Point</Dropdown.Item>
+        <Dropdown.Item>Area</Dropdown.Item>
       </DropdownButton>
     </InputGroup>
   );

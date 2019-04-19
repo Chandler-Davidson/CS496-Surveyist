@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 
 export default function ChartSelectionCard(props) {
-  const { name } = props.chart;
+  const { name } = props;
 
   return (
     <div style={{ width: '18rem' }}>
@@ -20,7 +20,7 @@ export default function ChartSelectionCard(props) {
         style={{ width: '95%' }}
         src="https://www.smartsheet.com/sites/default/files/ic-line-charts-excel-misleading3-both.png"
       />
-      <h2>{name}</h2>
+      <h3>{name}</h3>
     </div>
   );
 }
