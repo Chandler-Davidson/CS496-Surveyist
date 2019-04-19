@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import Axios from "axios";
+import { useState, useEffect } from 'react';
+import Axios from 'axios';
 
-const url = "http://localhost:8080";
+const url = 'http://localhost:8080';
 
-export default function GetData(endpoint) {
-  const [response, setResponse] = useState({ data: [] });
+export default function Get(endpoint) {
+  const [response, setResponse] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -18,6 +18,10 @@ export default function GetData(endpoint) {
   return response;
 }
 
-export async function SendData(endpoint, data) {
+export async function Post(endpoint, data) {
   return await Axios.post(`${url}/${endpoint}`, data);
+}
+
+export function GetValue(obj) {
+  return obj ? obj.data : [];
 }

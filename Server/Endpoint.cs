@@ -32,7 +32,7 @@ namespace SurveyistServer
 
         private Response PreviousSurvey()
         {
-            var docCollection = DatabaseManager.GetDocuments("PreviousSurveys");
+            var docCollection = DatabaseManager.GetDocuments("SurveySummary");
 
             return docCollection.AsResponse();
         }

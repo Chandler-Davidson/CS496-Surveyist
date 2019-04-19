@@ -2,18 +2,18 @@ import React, { useState, useEffect } from 'react';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
 import Page from '../components/page';
-import GetData from '../components/getData';
+import Get, { GetValue } from '../components/getData';
 import SurveyCard from '../components/surveyCard';
 
-const getAnalysisHistory = props =>
-  props.map(x => <SurveyCard key={x.Name} data={x} />);
+const toSurveyCard = props => <SurveyCard key={props.name} survey={props} />;
 
 export default function Home() {
-  const previousSurveys = GetData('PreviousSurvey');
+  const previousSurveys = GetValue(Get('PreviousSurvey'));
+  const surveyCards = previousSurveys.map(toSurveyCard);
 
   return (
     <Page>
-      <div>{getAnalysisHistory(previousSurveys.data)}</div>
+      <div>{surveyCards}</div>
 
       <ButtonToolbar style={{ marginTop: '10px' }}>
         <Button href="/newSurvey">New Survey</Button>

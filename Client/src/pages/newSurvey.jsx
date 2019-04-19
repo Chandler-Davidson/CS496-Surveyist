@@ -6,7 +6,7 @@ import ToggleButton from 'react-bootstrap/ToggleButton';
 import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import Button from 'react-bootstrap/Button';
 import Page from '../components/page';
-import GetData, { SendData } from '../components/getData';
+import Get, { Post, GetValue } from '../components/getData';
 import ChartSelectCard from '../components/chartSelectCard';
 
 const chartSelections = charts =>
@@ -26,7 +26,7 @@ const generateSurvey = surveyType => {
   formData.set('data', dataFile);
 
   (async () => {
-    const response = await SendData('NewSurvey', formData);
+    const response = await Post('NewSurvey', formData);
 
     if (response.status === 200) {
       Router.push(
@@ -38,7 +38,7 @@ const generateSurvey = surveyType => {
 };
 
 export default function NewSurvey() {
-  const chartTypes = GetData('ChartTypes');
+  const chartTypes = GetValue(Get('ChartTypes'));
   const [selectedSurvey, setSurvey] = useState('');
 
   return (
@@ -56,7 +56,7 @@ export default function NewSurvey() {
           name="chartSelection"
           onChange={x => setSurvey(x.name)}
         >
-          {chartSelections(chartTypes.data)}
+          {chartSelections(chartTypes)}
         </ToggleButtonGroup>
 
         <input
