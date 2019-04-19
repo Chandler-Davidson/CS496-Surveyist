@@ -10,7 +10,12 @@ import Get, { Post, GetValue } from '../components/getData';
 import ChartSelectCard from '../components/chartSelectCard';
 
 const chartSelections = chart => (
-  <ToggleButton key={chart} value={chart} variant="outline-dark">
+  <ToggleButton
+    key={chart}
+    value={chart}
+    style={{ margin: '5px' }}
+    variant="outline-dark"
+  >
     <ChartSelectCard name={chart} />
   </ToggleButton>
 );
@@ -21,8 +26,8 @@ const generateSurvey = surveyType => {
 
   let formData = new FormData();
   formData.set('chartType', surveyType);
-  formData.set('surveyName', surveyName);
-  formData.set('data', dataFile);
+  formData.set('name', surveyName);
+  formData.set('chartData', dataFile);
 
   (async () => {
     const response = await Post('NewSurvey', formData);
@@ -52,7 +57,7 @@ export default function NewSurvey() {
         <ToggleButtonGroup
           type="radio"
           name="chartSelection"
-          onChange={x => setSurvey(x.name)}
+          onChange={x => setSurvey(x)}
         >
           {chartTypes.map(chartSelections)}
         </ToggleButtonGroup>

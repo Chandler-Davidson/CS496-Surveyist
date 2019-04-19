@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Driver;
@@ -59,28 +61,26 @@ namespace SurveyistServer
 
             var surveyId = Guid.NewGuid();
             surveyConfig["surveyId"] = surveyId;
-            surveyConfig["timeCreated"] = DateTime.UtcNow.ToString("o");
+            surveyConfig["date"] = DateTime.UtcNow.ToString("o");
 
             // Convert to json intermediate, because Mongo can't handle dynamic dictionary
             var briefJson = new JavaScriptSerializer().Serialize(surveyConfig);
 
             // Insert into reference collection
-            DatabaseManager.InsertNewDocument("PreviousSurveys", briefJson);
+            DatabaseManager.InsertNewDocument("SurveySummary", briefJson);
 
-            //var fileStream = Request.Files.FirstOrDefault()?.Value;
+            var fileStream = Request.Files.FirstOrDefault()?.Value;
 
-            //var bytes = new byte[fileStream.Length];
-            //fileStream.Position = 0;
-            //fileStream.Read(bytes, 0, (int)fileStream.Length);
-            //var fileContents = Encoding.ASCII.GetString(bytes);
+            var bytes = new byte[fileStream.Length];
+            fileStream.Position = 0;
+            fileStream.Read(bytes, 0, (int)fileStream.Length);
+            var fileContents = Encoding.ASCII.GetString(bytes);
 
+            surveyConfig["chartData"] = new JavaScriptSerializer().DeserializeObject(fileContents);
+            var detailedJson = new JavaScriptSerializer().Serialize(surveyConfig);
 
-            ////surveyConfig["data"] = new JavaScriptSerializer().DeserializeObject(fileContents);
-            //var detailedJson = new JavaScriptSerializer().Serialize(surveyConfig);
-
-            //// Insert into detailed collection
-            //var surveyDetails = DatabaseManager.GetCollection("SurveyDetails");
-            //surveyDetails.InsertOne(detailedJson);
+            // Insert into detailed collection
+            DatabaseManager.InsertNewDocument("SurveyDetails", detailedJson);
 
             return new TextResponse(surveyId.ToString())
             {
