@@ -1,23 +1,16 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace SurveyistServer
 {
-    public class Database
+    public static class Database
     {
         private static readonly MongoClient Client = new MongoClient("mongodb://localhost:27017");
-        private readonly IMongoDatabase _database = Client.GetDatabase("Surveyist");
+        private static readonly IMongoDatabase _database = Client.GetDatabase("Surveyist");
 
-        private readonly string _defaultDocumentPath = @"..\..\defaultCharts.json";
-        private readonly FilterDefinition<BsonDocument> _emptyFilter = Builders<BsonDocument>.Filter.Empty;
-
-        public Database()
-        {
-            EnsureDefaultCollection("ChartTypes", _defaultDocumentPath);
-        }
-
-        private void EnsureDefaultCollection(string collectionName, string collectionPath)
+        public static void EnsureDefaultCollection(string collectionName, string collectionPath)
         {
             var defaultExist = CollectionExists(_database, collectionName);
 
@@ -31,39 +24,44 @@ namespace SurveyistServer
         private static bool CollectionExists(IMongoDatabase database, string collectionName)
         {
             var filter = new BsonDocument("name", collectionName);
-            var collectionCursor = database.ListCollections(new ListCollectionsOptions {Filter = filter});
+            var collectionCursor = database.ListCollections(new ListCollectionsOptions { Filter = filter });
             return collectionCursor.Any();
         }
 
-        internal IMongoCollection<BsonDocument> GetCollection(string collectionName)
+        internal static IMongoCollection<T> GetCollection<T>(string collectionName)
         {
             // Wrapper to fetch collection
-            return _database.GetCollection<BsonDocument>(collectionName);
+            return _database.GetCollection<T>(collectionName);
         }
 
-        internal IAsyncCursor<BsonDocument> GetDocuments(string collectionName,
-            FilterDefinition<BsonDocument> filter = null)
+        internal static IEnumerable<T> GetDocuments<T>(string collectionName,
+            FilterDefinition<T> filter = null)
         {
-            // Get collection
-            var collection = GetCollection(collectionName);
+            try
+            {
+                // Get collection
+                var collection = GetCollection<T>(collectionName);
 
-            // Apply filter if not null, otherwise get all
-            filter = filter ?? _emptyFilter;
+                // Apply filter if not null, otherwise get all
+                filter = filter ?? Builders<T>.Filter.Empty;
 
-            // Return docs
-            return collection.FindSync<BsonDocument>(filter);
+                // Return docs
+                return collection.Find(filter).ToEnumerable();
+            }
+            catch (System.Exception e)
+            {
+
+                throw;
+            }
         }
 
-        internal void InsertNewDocument(string collectionName, string contents)
+        internal static void InsertNewDocument<T>(string collectionName, T contents)
         {
-            // Create a new document
-            var newDoc = BsonDocument.Parse(contents);
-
             // Fetch collection
-            var collection = GetCollection(collectionName);
+            var collection = GetCollection<T>(collectionName);
 
             // Insert document
-            collection.InsertOne(newDoc);
+            collection.InsertOne(contents);
         }
     }
 }
