@@ -24,5 +24,15 @@ namespace SurveyistServer
 
             return Database.GetDocuments(CollectionName, filter);
         }
+
+        internal void AddQuestionsToSurvey(string surveyId, Question[] questions)
+        {
+            var surveyCollection = GetCollection();
+
+            var filter = FilterBuilder.Eq(s => s.surveyGuid, surveyId);
+            var update = UpdateBuilder.Set(s => s.Questions, questions);
+
+            surveyCollection.UpdateOne(filter, update);
+        }
     }
 }

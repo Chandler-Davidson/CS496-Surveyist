@@ -10,15 +10,23 @@ namespace SurveyistServer
 
         public SecurityModule()
         {
+            Options["/{catchAll*}"] = parameters => new Response { StatusCode = HttpStatusCode.Accepted };
+
+            After.AddItemToEndOfPipeline(context =>
+            {
+                context.Response.WithHeader("Access-Control-Allow-Origin", "*")
+                    .WithHeader("Access-Control-Allow-Methods", "POST, GET")
+                    .WithHeader("Access-Control-Allow-Headers", "Accept, Origin, Content-type");
+            });
+
             Post[nameof(Login)] = _ => Login();
         }
 
         private Response Login()
         {
             var user = this.Bind<User>();
-            var isValidUser = UserRepository.ValidateUser(user);
 
-            return isValidUser ? HttpStatusCode.OK : HttpStatusCode.Unauthorized;
+            return this.LoginAndRedirect(user.Guid);
         }
     }
 }

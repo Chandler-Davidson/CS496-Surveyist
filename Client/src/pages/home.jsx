@@ -8,7 +8,9 @@ import SurveyCard from '../components/surveyCard';
 const toSurveyCard = props => <SurveyCard key={props.name} survey={props} />;
 
 export default function Home() {
-  const previousSurveys = GetValue(Get('PreviousSurvey'));
+  const previousSurveys = GetValue(Get('PreviousSurveys'));
+  console.log(previousSurveys);
+
   const surveyCards = previousSurveys.map(toSurveyCard);
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { withRouter } from 'next/router';
-import GetData, { GetValue } from '../components/getData';
+import Get, { Post, GetValue } from '../components/getData';
 
 import Page from '../components/page';
 import Question from '../components/question';
@@ -16,29 +16,31 @@ const getQuestions = questionElements => {
   }));
 };
 
+const sendQuestions = questions => {
+  Post('AddQuestionsToSurvey', {});
+};
+
 function Questions(props) {
   const { surveyId } = props.router.query;
-  const _visData = GetValue(GetData(`PreviousSurvey/${surveyId}`));
-  const visData = _visData.length > 0 ? _visData[0].chartData : {};
+  const visData = GetValue(Get(`PreviousSurvey/${surveyId}`));
+
   const [questions, setQuestions] = useState([
     { question: 'New question', selectionType: 'SelectionType' }
   ]);
 
   return (
     <Page>
-      {visData ? (
+      {visData.chartData ? (
         <Line
           style={{ maxHeight: '400px' }}
-          data={visData}
+          data={visData.chartData}
+          onClick={(a, b, c) => {
+            console.log(a);
+            console.log(b);
+          }}
           options={{
-            onElementsClick: elems => {
-              console.log(elems);
-            },
-            getElementsAtEvent: elems => {
-              console.log(elems);
-            },
-            getDatasetAtEvent: dataset => {
-              console.log(dataset);
+            onClick: (e, i) => {
+              console.log(i);
             }
           }}
         />

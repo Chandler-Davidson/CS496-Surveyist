@@ -1,5 +1,5 @@
-﻿using System;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 
 namespace SurveyistServer
 {
@@ -25,6 +25,7 @@ namespace SurveyistServer
         public string name { get; set; }
         public string chartType { get; set; }
         public ChartData chartData { get; set; }
+        public Question[] Questions { get; set; }
 
         public static explicit operator SurveySummary(SurveyDetails surveyDetails)
         {
@@ -41,7 +42,19 @@ namespace SurveyistServer
     [BsonIgnoreExtraElements]
     class ChartData
     {
-        public object[] chartData { get; set; }
-		public object[] dataSets { get; set; }
+        public object[] labels { get; set; }
+        public object[] datasets { get; set; }
+    }
+
+    class AddQuestionsCommand
+    {
+        public string surveyId { get; set; }
+        public Question[] questions { get; set; }
+    }
+
+    class Question
+    {
+        public string question { get; set; }
+        public string selectionType { get; set; }
     }
 }

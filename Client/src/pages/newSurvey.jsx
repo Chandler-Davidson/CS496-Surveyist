@@ -39,9 +39,7 @@ const generateSurvey = surveyType => {
 };
 
 export default function NewSurvey() {
-  const _chartTypes = GetValue(Get('ChartTypes'));
-  const chartTypes = _chartTypes.length ? _chartTypes[0].charts : [];
-
+  const chartTypes = GetValue(Get('ChartTypes'));
   const [selectedSurvey, setSurvey] = useState('');
 
   return (
