@@ -16,8 +16,8 @@ const getQuestions = questionElements => {
   }));
 };
 
-const sendQuestions = questions => {
-  Post('AddQuestionsToSurvey', {});
+const sendQuestions = (surveyId, questions) => {
+  Post('AddQuestionsToSurvey', { surveyId: surveyId, questions: questions });
 };
 
 function Questions(props) {
@@ -71,7 +71,8 @@ function Questions(props) {
         </Button>
         <Button
           onClick={() =>
-            console.log(
+            sendQuestions(
+              surveyId,
               getQuestions([...document.getElementsByClassName('question')])
             )
           }

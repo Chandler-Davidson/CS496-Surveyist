@@ -5,7 +5,7 @@ import Link from 'next/link';
 const humanDate = date => new Date(date).toDateString();
 
 export default function SurveyCard(props) {
-  const { surveyId, name, date, chartType } = props.survey;
+  const { surveyGuid, name, date } = props.survey;
 
   return (
     <Card style={{ width: '18rem' }}>
@@ -16,8 +16,8 @@ export default function SurveyCard(props) {
       />
       <Card.Body>
         <Link
-          href={`/previous?surveyId${surveyId}`}
-          as={`/previous/${surveyId}`}
+          href={`/previous?surveyId=${surveyGuid}`}
+          as={`/previous/${name}`}
         >
           <Card.Title>
             <a>{name}</a>
