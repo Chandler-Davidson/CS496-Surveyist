@@ -35,7 +35,8 @@ function Previous(props) {
     return (
       <Page>
         <h1>{survey.name}</h1>
-        <h2>{selectedQuestion ? selectedQuestion : ''}</h2>
+        <h2>{surveyId}</h2>
+        <h3>{selectedQuestion ? selectedQuestion : ''}</h3>
         <Line
           style={{ maxHeight: '400px' }}
           data={{ labels: survey.chartData.labels, datasets: chartDatasets }}
