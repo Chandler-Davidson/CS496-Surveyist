@@ -1,7 +1,7 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using MongoDB.Driver;
 
 namespace SurveyistServer
 {
@@ -33,6 +33,38 @@ namespace SurveyistServer
             var update = UpdateBuilder.Set(s => s.Questions, questions);
 
             surveyCollection.UpdateOne(filter, update);
+        }
+
+        internal void AddAnswersToSurvey(string surveyId, PointAnswer[] answers)
+        {
+            try
+            {
+                var filter = FilterBuilder.Eq(s => s.surveyGuid, surveyId);
+                var survey = Database.GetDocuments(CollectionName, filter).FirstOrDefault();
+
+                var updatedQuestions = survey.Questions;
+
+                for (int i = 0; i < updatedQuestions.Length; i++)
+                {
+                    if (updatedQuestions[i].answers == null)
+                        updatedQuestions[i].answers = new PointAnswer[0]; 
+                }
+
+
+                for (int i = 0; i < answers.Length; i++)
+                    updatedQuestions[i].answers = updatedQuestions[i].answers.Concat(new PointAnswer[] { answers[i] }).ToArray();
+
+                survey.Questions = updatedQuestions;
+
+                var coll = GetCollection();
+                coll.DeleteOne(filter);
+                Add(survey);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
         }
     }
 }

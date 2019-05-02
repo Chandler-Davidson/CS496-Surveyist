@@ -15,10 +15,8 @@ export default function Question(props) {
     return (
       <InputGroup style={{ width: '97%', margin: '5px' }} className="question">
         <InputGroup.Prepend>
-          {props.question ? (
-            <Button variant="outline-secondary" onClick={() => console.log()}>
-              O
-            </Button>
+          {props.question !== 'New question' ? (
+            <Button variant="outline-secondary">O</Button>
           ) : (
             <Button
               variant="outline-secondary"
@@ -31,13 +29,13 @@ export default function Question(props) {
 
         <FormControl
           placeholder={questionTitle}
-          disabled={props.question ? true : false}
+          disabled={props.question !== 'New question' ? 'disabled' : ''}
         />
 
         <DropdownButton
           as={InputGroup.Append}
           title={selectionType}
-          disabled={props.question ? true : false}
+          disabled={props.question !== 'New question' ? 'disabled' : ''}
         >
           <Dropdown.Item eventKey="Point" onSelect={setSelectionType}>
             Point

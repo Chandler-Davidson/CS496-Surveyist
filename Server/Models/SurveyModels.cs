@@ -52,9 +52,22 @@ namespace SurveyistServer
         public Question[] questions { get; set; }
     }
 
+    class SubmitAnswersCommand
+    {
+        public string surveyId { get; set; }
+        public PointAnswer[] answers { get; set; }
+    }
+
     class Question
     {
         public string question { get; set; }
         public string selectionType { get; set; }
+        public PointAnswer[] answers { get; set; }
+    }
+
+    class PointAnswer
+    {
+        public string x { get; set; }
+        public int y { get; set; }
     }
 }

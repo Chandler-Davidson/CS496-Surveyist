@@ -29,6 +29,7 @@ namespace SurveyistServer
             Get[$"{nameof(PreviousSurvey)}/{{surveyGuid}}"] = parameters => PreviousSurvey(new Guid(parameters.surveyGuid));
             Post[nameof(NewSurvey)] = _ => NewSurvey();
             Post[nameof(AddQuestionsToSurvey)] = _ => AddQuestionsToSurvey();
+            Post[nameof(SubmitAnswers)] = _ => SubmitAnswers();
         }
 
         private Response PreviousSurveys()
@@ -85,6 +86,16 @@ namespace SurveyistServer
             var questions = command.questions;
 
             SurveyDetailsRepository.AddQuestionsToSurvey(command.surveyId, questions);
+
+            return HttpStatusCode.OK;
+        }
+
+        private Response SubmitAnswers()
+        {
+            var command = this.Bind<SubmitAnswersCommand>();
+            var answers = command.answers;
+
+            SurveyDetailsRepository.AddAnswersToSurvey(command.surveyId, answers);
 
             return HttpStatusCode.OK;
         }
