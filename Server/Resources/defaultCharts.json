@@ -1,5 +1,5 @@
 ﻿{
-  "charts": [
+  "chartTypes": [
     "Line Chart",
     "Heat Map"
   ]
