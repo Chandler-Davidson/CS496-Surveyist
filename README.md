@@ -13,3 +13,13 @@ As a Surveyor, you're able to do the following tasks: login, create new surveys,
 ### Respondent
 
 As a Respondent, you will receive a one time use url from a Surveyor. Following the url takes you to a page that includes the established data visualization and a set of questions regarding such.
+
+## Getting Started
+
+### Server
+
+The Nancy server is able to be run as a console application after building in Visual Studio.
+
+### Client
+
+The client side application is built in Next.js. To start up a development server, run the following command within the Client folder: `npm i && npm run dev`.
