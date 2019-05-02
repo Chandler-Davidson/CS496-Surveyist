@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+# Surveyist
+>>>>>>> 25674cb67a03773aa5516f7b3afac121925baf91
 # CS496 - Surveyist
 
 Developed for The University of Alabama in Huntsville's CS 496: Special Topics Data Visualization. This course focused on the fundamentals of user experience within data visualization in search of ways to improve the state of human computer interaction.
