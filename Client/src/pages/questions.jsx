@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withRouter } from 'next/router';
+import Router, { withRouter } from 'next/router';
 import Get, { Post, GetValue } from '../components/getData';
 
 import Page from '../components/page';
@@ -17,7 +17,16 @@ const getQuestions = questionElements => {
 };
 
 const sendQuestions = (surveyId, questions) => {
-  Post('AddQuestionsToSurvey', { surveyId: surveyId, questions: questions });
+  (async () => {
+    const response = await Post('AddQuestionsToSurvey', {
+      surveyId: surveyId,
+      questions: questions
+    });
+
+    if (response.status === 200) {
+      Router.push(`/`);
+    }
+  })();
 };
 
 function Questions(props) {
@@ -31,19 +40,7 @@ function Questions(props) {
   return (
     <Page>
       {visData.chartData ? (
-        <Line
-          style={{ maxHeight: '400px' }}
-          data={visData.chartData}
-          onClick={(a, b, c) => {
-            console.log(a);
-            console.log(b);
-          }}
-          options={{
-            onClick: (e, i) => {
-              console.log(i);
-            }
-          }}
-        />
+        <Line style={{ maxHeight: '400px' }} data={visData.chartData} />
       ) : (
         <></>
       )}

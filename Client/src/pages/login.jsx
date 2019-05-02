@@ -7,7 +7,6 @@ async function sendLogin(username, password) {
   const credentials = { username: username, password: password };
 
   const response = await Post('Login', credentials);
-  console.log(response);
 }
 
 export default function Login() {
